@@ -1,0 +1,78 @@
+html, body, [data-testid="stAppViewContainer"], .stApp {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+[data-testid="stSidebar"],
+[data-testid="stSidebar"] * {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+h1, h2, h3, h4, h5, h6, p, label, span, div {
+  color: #000000;
+}
+
+:root {
+  --amz-blue: #0078C1;
+}
+
+.stButton > button,
+.stDownloadButton > button {
+  background: var(--amz-blue) !important;
+  color: #FFFFFF !important;
+  border: 1px solid var(--amz-blue) !important;
+  border-radius: 6px !important;
+}
+
+.stButton > button:hover,
+.stDownloadButton > button:hover {
+  filter: brightness(0.95);
+}
+
+.stButton > button:focus,
+.stDownloadButton > button:focus {
+  outline: 2px solid var(--amz-blue) !important;
+  box-shadow: 0 0 0 3px rgba(0, 120, 193, 0.25) !important;
+}
+
+textarea,
+input[type="text"],
+input[type="number"],
+input[type="file"],
+select {
+  color: #000000 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #000000 !important;
+  border-radius: 6px !important;
+}
+
+textarea:focus,
+input:focus,
+select:focus {
+  outline: 2px solid var(--amz-blue) !important;
+  border-color: var(--amz-blue) !important;
+}
+
+[data-testid="stFileUploader"] label,
+[data-testid="stFileUploader"] span {
+  color: #000000 !important;
+}
+
+[data-testid="stFileUploader"] [data-testid="stMarkdownContainer"] a {
+  color: var(--amz-blue) !important;
+}
+
+[role="tab"][aria-selected="true"] {
+  color: var(--amz-blue) !important;
+  border-bottom: 2px solid var(--amz-blue) !important;
+}
+
+a,
+a:visited {
+  color: var(--amz-blue) !important;
+}
+
+a:hover {
+  text-decoration: underline;
+}
