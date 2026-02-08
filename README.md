@@ -98,23 +98,17 @@ python -m textDetector \
   --print-text
 ```
 
-![Text Detection Screenshot](src/images/text.png)
-
 #### PDF Redaction
 
 ```bash
 python -m pdfRedactor.cli --in document.pdf --out redacted.pdf
 ```
 
-![PDF Redaction Screenshot](src/images/pdf.png)
-
 #### Image Redaction
 
 ```bash
 python -m imageRedactor.analyzer --input image.jpg --output redacted.jpg
 ```
-
-![Image Redaction Screenshot](src/images/image.png)
 
 ## 📁 Project Structure
 
