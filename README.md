@@ -1,6 +1,6 @@
 # PII & SPI: Detection + Redaction System
 
-A comprehensive python-based solution for detecting and redacting PII and SPI from text documents, PDF's, and images.
+A comprehensive python-based solution for detecting and redacting personally identifiable information and sensitive personal information from text documents, PDF's, and images using natural language processing and optical character recognition.
 
 ## Project Scope
 
