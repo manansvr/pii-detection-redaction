@@ -24,6 +24,7 @@ def main():
         "--mode",
         choices=["fill", "blur", "pixelate", "rectangle"],
         default="fill",
+        help="Redaction Mode"
     )
 
     ap.add_argument(
@@ -33,19 +34,30 @@ def main():
     )
 
     ap.add_argument(
-        "--padding", type=int, default=2, help="Padding Around Boxes"
+        "--padding",
+        type=int,
+        default=2,
+        help="Padding Around Boxes"
     )
 
     ap.add_argument(
-        "--blur", type=int, default=8, help="Blur Radius For Blur Mode"
+        "--blur",
+        type=int,
+        default=8,
+        help="Blur Radius For Blur Mode"
     )
 
     ap.add_argument(
-        "--pixel", type=int, default=12, help="Pixel Size For Pixelate Mode"
+        "--pixel",
+        type=int,
+        default=12,
+        help="Pixel Size For Pixelate Mode"
     )
 
     ap.add_argument(
-        "--labels", action="store_true", help="Draw Entity Labels"
+        "--labels",
+        action="store_true",
+        help="Draw Entity Labels On Top Of Redactions"
     )
 
     args = ap.parse_args()

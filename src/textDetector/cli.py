@@ -32,34 +32,34 @@ def parseArgs():
         "--lang",
         type=str,
         default="en",
-        help="Language Code (Default: en)",
+        help="Language Code",
     )
 
     p.add_argument(
         "--size",
         type=int,
         default=5000,
-        help="Chunk Size In Characters (Default: 5000)",
+        help="Chunk Size In Characters",
     )
 
     p.add_argument(
         "--overlap",
         type=int,
         default=300,
-        help="Overlap Between Chunks (Default: 300)",
+        help="Overlap Between Chunks In Characters",
     )
 
     p.add_argument(
         "--min-score",
         type=float,
         default=0.0,
-        help="Minimum Confidence Score (Default: 0.0)",
+        help="Minimum Confidence Score For Detected Entities",
     )
 
     p.add_argument(
         "--anonymize",
         action="store_true",
-        help="Also Emit Redacted Text To Stderr",
+        help="Also Emit Redacted Text To stderr",
     )
 
     p.add_argument(

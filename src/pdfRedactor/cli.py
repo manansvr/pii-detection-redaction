@@ -29,13 +29,13 @@ def parseArgs():
         "--out",
         dest="outfile",
         default=None,
-        help="Path To Output PDF (default: <in>_redacted.pdf)",
+        help="Path To Output PDF",
     )
 
     p.add_argument(
         "--lang",
         default="en",
-        help="Language Code (Default: en)",
+        help="Language Code",
     )
 
     p.add_argument(
@@ -47,13 +47,13 @@ def parseArgs():
     p.add_argument(
         "--label-prefix",
         default="",
-        help="Optional Prefix For Labels (e.g. 'PII: ')",
+        help="Optional Prefix For Labels",
     )
 
     p.add_argument(
         "--attach-original",
         action="store_true",
-        help="Attach Original PDF To The Output",
+        help="Attach Original PDF To The Output For Reference",
     )
 
     return p.parse_args()

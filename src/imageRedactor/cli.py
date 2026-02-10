@@ -36,7 +36,7 @@ def parseArgs():
         "--entities",
         nargs="*",
         default=None,
-        help="Entity Types To Redact (default: all)"
+        help="Entity Types To Redact"
     )
 
     ap.add_argument(
@@ -92,7 +92,7 @@ def parseArgs():
         "--min-score",
         type=float,
         default=0.0,
-        help="Minimum Confidence Score (Default: 0.0)"
+        help="Minimum Confidence Score"
     )
 
     return ap.parse_args()

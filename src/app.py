@@ -238,7 +238,7 @@ def renderDownloadAndPreview(fileType, bytesKey, nameKey, previewRenderer=None):
             previewLabel,
             value=st.session_state[pvKey],
             key=f"pv_{fileType}_toggle_{fileName}",
-            help="Toggle to show/hide the preview. This will persist until you process a new file.",
+            help="Toggle To Show/Hide The Preview. This Will Persist Until You Process A New File.",
         )
 
         if st.session_state[pvKey]:
@@ -367,8 +367,8 @@ with tabText:
             value=4000,
             step=100,
             help=(
-                "Max characters per chunk for processing. Larger chunks mean fewer calls "
-                "but higher memory; smaller chunks improve recall at boundaries."
+                "Max Characters Per Chunk For Processing. Larger Chunks Mean Fewer Calls "
+                "But Higher Memory; Smaller Chunks Improve Recall At Boundaries."
             ),
         )
 
@@ -379,8 +379,8 @@ with tabText:
             value=300,
             step=50,
             help=(
-                "How many characters to overlap between adjacent chunks. "
-                "Helps catch entities split across chunk boundaries."
+                "How Many Characters To Overlap Between Adjacent Chunks. "
+                "Helps Catch Entities Split Across Chunk Boundaries."
             ),
         )
 
@@ -392,8 +392,8 @@ with tabText:
             step=0.05,
             format="%.2f",
             help=(
-                "Confidence threshold (0–1). Entities below this score are ignored. "
-                "Increase to reduce false positives; decrease to detect weaker matches."
+                "Confidence Threshold (0–1). Entities Below This Score Are Ignored. "
+                "Increase To Reduce False Positives; Decrease To Detect Weaker Matches."
             ),
         )
 
@@ -401,8 +401,8 @@ with tabText:
             "Print Matched Text To Logs (--print-text)",
             value=False,
             help=(
-                "When enabled, matched spans are printed to stdout for debugging/audit. "
-                "Useful for verifying detections during testing."
+                "When Enabled, Matched Spans Are Printed To Stdout For Debugging/Audit. "
+                "Useful For Verifying Detections During Testing."
             ),
         )
 
@@ -410,8 +410,8 @@ with tabText:
             "Redact To A New File (mask-to-file)",
             value=True,
             help=(
-                "Writes the redacted output to a new .txt file instead of only "
-                "printing results to logs."
+                "Writes The Redacted Output To A New .txt File Instead Of Only "
+                "Printing Results To Logs."
             ),
         )
 
@@ -419,8 +419,8 @@ with tabText:
             "Anonymize (Only When Using Raw Text Input)",
             value=False,
             help=(
-                "When pasting raw text (not a file), anonymize in-memory and preview "
-                "without creating an output file."
+                "When Pasting Raw Text (Not A File), Anonymize In-Memory And Preview "
+                "Without Creating An Output File."
             ),
         )
 
@@ -615,7 +615,7 @@ with tabImage:
         fillColor = st.color_picker(
             "Fill/Rectangle Color",
             value="#000000",
-            help="Color for fill and rectangle modes"
+            help="Color For Fill & Rectangle Modes"
         )
 
         col1, col2, col3 = st.columns(3)
@@ -626,7 +626,7 @@ with tabImage:
                 min_value=1,
                 max_value=50,
                 value=8,
-                help="Blur strength (blur mode only)"
+                help="Blur Strength (Blur Mode Only)"
             )
 
         with col2:
@@ -635,7 +635,7 @@ with tabImage:
                 min_value=1,
                 max_value=50,
                 value=12,
-                help="Block size (pixelate mode only)"
+                help="Block Size (Pixelate Mode Only)"
             )
 
         with col3:
@@ -644,19 +644,19 @@ with tabImage:
                 min_value=0,
                 max_value=20,
                 value=2,
-                help="Extra padding around detected regions"
+                help="Extra Padding Around Detected Regions"
             )
 
         drawLabels = st.checkbox(
             "Draw Entity Labels",
             value=False,
-            help="Show entity type labels on redacted regions"
+            help="Show Entity Type Labels On Redacted Regions"
         )
 
         ocrLang = st.text_input(
             "OCR Language(s)",
             value="eng",
-            help="Language codes for OCR"
+            help="Language Codes For OCR"
         )
 
     imageFile = st.file_uploader(
