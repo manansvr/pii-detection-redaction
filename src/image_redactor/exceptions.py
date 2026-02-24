@@ -1,0 +1,2 @@
+class ImageRedactorError(Exception):
+    pass

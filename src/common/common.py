@@ -1,40 +1,22 @@
 # src/common/common.py
 
-"""
-common utilities for building presidio analyzer engines with spacy models.
-shared across text detector, pdf redactor, and image redactor modules.
-"""
-
 from __future__ import annotations
 
 import spacy
 from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import SpacyNlpEngine
 
+from entity_mapping import build_au_recognizers
 
-def pickSpacyModel(
+
+def pick_spacy_model(
     preferred: str = "en_core_web_lg",
     fallback: str = "en_core_web_sm",
 ) -> str:
-    """
-    returns a spacy model package name which is installed & loadable.
-    prefers `preferred`; falls back to `fallback` if needed.
-    raises if neither is available (prompts user to install).
-
-    args:
-        preferred: preferred model name (default: en_core_web_lg)
-        fallback: fallback model name (default: en_core_web_sm)
-
-    returns:
-        name of the available model
-
-    raises:
-        run time error: if neither model is available
-    """
-    for modelName in (preferred, fallback):
+    for model_name in (preferred, fallback):
         try:
-            spacy.load(modelName)
-            return modelName
+            spacy.load(model_name)
+            return model_name
         except Exception:
             continue
 
@@ -46,28 +28,24 @@ def pickSpacyModel(
     )
 
 
-def buildPresidioAnalyzer(language: str = "en") -> AnalyzerEngine:
-    """
-    builds a presidio analyzer engine using spacy via spacy nlp engine.
-    fixes the common 'lang_code is missing' error by passing the correct
-    models structure.
+def build_presidio_analyzer(
+    language: str = "en",
+    include_au_recognizers: bool = True
+) -> AnalyzerEngine:
+    model_name = pick_spacy_model()
 
-    args:
-        language: language code (default: "en")
-
-    returns:
-        configured analyzer engine instance
-    """
-    modelName = pickSpacyModel()
-
-    # models must be a list of dicts with lang_code & model_name
-    nlpEngine = SpacyNlpEngine(
-        models=[{"lang_code": language, "model_name": modelName}]
+    nlp_engine = SpacyNlpEngine(
+        models=[{"lang_code": language, "model_name": model_name}]
     )
 
     analyzer = AnalyzerEngine(
-        nlp_engine=nlpEngine,
+        nlp_engine=nlp_engine,
         supported_languages=[language],
     )
+
+    if include_au_recognizers:
+        au_recognizers = build_au_recognizers()
+        for recognizer in au_recognizers:
+            analyzer.registry.add_recognizer(recognizer)
 
     return analyzer

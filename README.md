@@ -2,115 +2,51 @@
 
 A comprehensive python-based solution for detecting and redacting personally identifiable information and sensitive personal information from text documents, PDF's, and images using natural language processing and optical character recognition.
 
-## Project Scope
-
-This system helps organizations protect sensitive information by automatically detecting and redacting PII/SPI such as names, email addresses, phone numbers, financial information, and more. The system designed for secure document sharing, compliance requirements, and data privacy protection.
-
 ## Features
 
-### Multi-Format Support
-- **Text Files**: process plain text documents (.txt)
-- **PDF Documents**: handle both text-based and scanned PDF's using OCR
-- **Images**: detect and redact PII from image files
+### Core Capabilities
+- **Multi-Format Support**: process text files, PDFs (text-based and scanned), images, and CSV spreadsheets
+- **Dual Interface**: user-friendly web application + scriptable command-line tools
+- **Local Processing**: all operations run locally - no data sent to external servers
+- **Privacy-First**: permanent redaction with automatic cleanup of temporary files
 
-### Dual Interface
-- **Web Application**: user-friendly stream-lit interface for interactive processing
-- **Command-Line Tools**: scriptable CLI for batch processing and automation
+### Detection & Analysis
+- **Named Entity Recognition (NER)**: advanced NLP using spaCy models for context-aware detection
+- **Pattern Matching**: regex-based detection for structured data (emails, phone numbers, credit cards)
+- **Custom Recognizers**: australian-specific entities (ABN, TFN, Medicare numbers)
+- **Configurable Thresholds**: adjustable confidence scores to balance precision and recall
+- **Multi-Language Support**: extensible language support via spaCy models
+- **Long Text Processing**: intelligent chunking with overlap for documents of any size
+- **OCR Integration**: tesseract OCR for scanned PDFs and images
 
-### Entity Types Detected
-- Personal Names (PERSON)
-- Email Addresses
-- Phone Numbers
-- URL's
-- Credit Card Numbers
-- Social Security Numbers
-- Bank Account Numbers
-- Australian Business Numbers (ABN)
-- Custom Pattern Recognition
+### Redaction Options
+- **Multiple Redaction Styles**:
+  - **Fill**: solid color rectangles (black, custom colors)
+  - **Blur**: gaussian blur effect for images
+  - **Pixelate**: pixelation effect for images
+- **Label-Based Replacement**:replace PII with entity type labels (e.g., `<PERSON>`, `<EMAIL>`)
+- **Relationship-Aware Masking**: context-based labels (e.g., "John's email" → `<John's EMAIL_ADDRESS>`)
+- **Anonymization Mode**: type-based anonymization with customizable operators
+- **Character Customization**: configurable redaction characters (default: `*`)
+- **Permanent Removal**: true redaction, not just visual masking
 
-## Installation
+### Output & Reporting
+- **Redacted Files**: generate clean, redacted versions of all file types
+- **JSON Export**: structured detection results with entity types, positions, and confidence scores
+- **Summary Reports**: statistical overview of detections by entity type
+- **Command Logs**: detailed execution logs in web interface
+- **Preview Capability**: in-app preview of redacted content before download
+- **CSV Structure Preservation**: maintain headers, delimiters, and formatting
 
-### Prerequisites
-- Python 3.8
-- Tesseract OCR (Scanned PDF's): `brew install tesseract` on macOS
+### Advanced Features
+- **Batch Processing**: CLI tools for automated, large-scale operations
+- **Header Row Handling**: smart CSV processing with optional header preservation
+- **Custom Delimiters**: support for various CSV formats (comma, tab, semicolon, etc.)
+- **Confidence Filtering**: minimum score thresholds to reduce false positives
+- **Adjustable Parameters**: chunk size, overlap, language, and more
+- **Error Handling**: robust exception handling with informative error messages
 
-### Setup
-
-1. **clone the repository**
-```bash
-git clone <repository-url>
-cd pii-detection-redaction
-```
-
-2. **install dependencies**
-```bash
-pip install -r requirements.txt
-```
-
-3. **download spaCy language model**
-```bash
-python -m spacy download en_core_web_sm
-
-# or
-
-python -m spacy download en_core_web_lg
-```
-
-## Usage
-
-### Web Application
-
-```bash
-streamlit run src/app.py
-```
-
-then open your browser to `http://localhost:8501`
-
-**Features:**
-- upload or paste text for analysis
-- upload PDF files for redaction
-- adjust detection parameters (chunk size, overlap, confidence threshold)
-- preview and download redacted files
-- view command execution logs
-
-### Command-Line Interface
-
-#### Text Detection
-
-**basic usage:**
-```bash
-python -m textDetector --text "contact manan rathi at manan.rathi@example.com"
-```
-
-**from file:**
-```bash
-python -m textDetector --in input.txt --mask-to-file output.txt
-```
-
-**advanced options:**
-```bash
-python -m textDetector \
-  --in input.txt \
-  --size 4000 \
-  --overlap 300 \
-  --min-score 0.3 \
-  --mask-to-file redacted.txt \
-  --print-text
-```
-
-#### PDF Redaction
-
-```bash
-python -m pdfRedactor.cli --in document.pdf --out redacted.pdf
-```
-
-#### Image Redaction
-
-```bash
-python -m imageRedactor.analyzer --input image.jpg --output redacted.jpg
-```
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 pii-detection-redaction/
@@ -119,7 +55,7 @@ pii-detection-redaction/
 │   ├── common/                     # shared utilities
 │   │   ├── common.py               # presidio analyzer builders
 │   │   └── __init__.py
-│   ├── textDetector/               # text PII detection module
+│   ├── text_detector/              # text PII detection module
 │   │   ├── analyzer.py             # analyzer engine setup
 │   │   ├── chunker.py              # long text processing
 │   │   ├── anonymize.py            # text anonymization
@@ -127,15 +63,25 @@ pii-detection-redaction/
 │   │   ├── relationships.py        # context-aware masking
 │   │   ├── cli.py                  # command-line interface
 │   │   └── __main__.py
-│   ├── pdfRedactor/                # PDF PII redaction module
+│   ├── pdf_redactor/               # PDF PII redaction module
 │   │   ├── analyzer.py             # PDF text extraction & analysis
 │   │   ├── redactor.py             # PDF redaction engine
 │   │   ├── cli.py                  # command-line interface
 │   │   └── __init__.py
-│   └── imageRedactor/              # image PII redaction module
-│       ├── analyzer.py             # image analysis
-│       ├── redactor.py             # image redaction engine
-│       ├── types.py                # data classes
+│   ├── image_redactor/             # image PII redaction module
+│   │   ├── analyzer.py             # image analysis
+│   │   ├── redactor.py             # image redaction engine
+│   │   ├── types.py                # data classes
+│   │   └── __init__.py
+│   ├── csv_redactor/               # CSV PII redaction module
+│   │   ├── analyzer.py             # analyzer engine setup
+│   │   ├── redactor.py             # CSV redaction engine
+│   │   ├── formatter.py            # results formatting
+│   │   ├── cli.py                  # command-line interface
+│   │   └── __main__.py
+│   └── entity_mapping/             # australia-specific entities
+│       ├── au_recognizers.py       # custom recognizers
+│       ├── entity_config.py        # severity & color mappings
 │       └── __init__.py
 ├── styles/
 │   └── theme.css                   # web app styling
@@ -145,6 +91,81 @@ pii-detection-redaction/
 
 ## Architecture & Flow Diagrams
 
+### System Architecture Overview
+
+```mermaid
+graph TB
+    subgraph "User Interfaces"
+        WebUI[Web Interface<br/>Streamlit App]
+        CLI[Command Line<br/>Interface]
+    end
+
+    subgraph "Processing Modules"
+        TextMod[Text Detector<br/>Plain Text Processing]
+        PDFMod[PDF Redactor<br/>Document Processing]
+        ImgMod[Image Redactor<br/>OCR + Redaction]
+        CSVMod[CSV Redactor<br/>Structured Data]
+    end
+
+    subgraph "Core Engine"
+        Common[Common Utilities<br/>Analyzer Builder]
+        Presidio[Microsoft Presidio<br/>PII Detection Engine]
+        SpaCy[spaCy NLP<br/>Named Entity Recognition]
+        CustomRec[Custom Recognizers<br/>AU Entities]
+    end
+
+    subgraph "External Tools"
+        PDFLib[pdfminer.six<br/>pikepdf]
+        OCR[Tesseract OCR<br/>pytesseract]
+        ImgLib[Pillow<br/>Image Processing]
+    end
+
+    subgraph "Output"
+        RedactedFiles[Redacted Files<br/>TXT, PDF, Images, CSV]
+        JSONOutput[Detection Reports<br/>JSON Format]
+        Summary[Summary Statistics<br/>Entity Counts]
+    end
+
+    WebUI --> TextMod
+    WebUI --> PDFMod
+    WebUI --> ImgMod
+    WebUI --> CSVMod
+
+    CLI --> TextMod
+    CLI --> PDFMod
+    CLI --> ImgMod
+    CLI --> CSVMod
+
+    TextMod --> Common
+    PDFMod --> Common
+    ImgMod --> Common
+    CSVMod --> Common
+
+    Common --> Presidio
+    Common --> SpaCy
+    Common --> CustomRec
+
+    PDFMod --> PDFLib
+    ImgMod --> OCR
+    ImgMod --> ImgLib
+
+    TextMod --> RedactedFiles
+    PDFMod --> RedactedFiles
+    ImgMod --> RedactedFiles
+    CSVMod --> RedactedFiles
+
+    TextMod --> JSONOutput
+    CSVMod --> JSONOutput
+
+    TextMod --> Summary
+    CSVMod --> Summary
+
+    style Common fill:#e1f5ff
+    style Presidio fill:#c8e6c9
+    style SpaCy fill:#c8e6c9
+    style RedactedFiles fill:#fff9c4
+```
+
 ### Web Application Flow
 
 ```mermaid
@@ -152,35 +173,51 @@ sequenceDiagram
     participant User
     participant Streamlit as app.py
     participant Common as common/common.py
-    participant TextDetector as textDetector/*
-    participant PDFRedactor as pdfRedactor/*
+    participant TextDetector as text_detector/*
+    participant PDFRedactor as pdf_redactor/*
+    participant ImageRedactor as image_redactor/*
+    participant CSVRedactor as csv_redactor/*
     participant Session as Session State
 
     User->>Streamlit: Upload File / Paste Text
-    Streamlit->>Streamlit: processFile()
+    Streamlit->>Streamlit: detectFileType()
     Streamlit->>Streamlit: buildCommand()
     Streamlit->>Streamlit: runModuleCommand()
 
     alt Text Processing
-        Streamlit->>TextDetector: python -m textDetector
+        Streamlit->>TextDetector: python -m text_detector
         TextDetector->>Common: buildPresidioAnalyzer()
         Common-->>TextDetector: AnalyzerEngine
         TextDetector->>TextDetector: analyzeLongText()
         TextDetector->>TextDetector: maskWithRelationships()
-        TextDetector-->>Streamlit: Redacted File
+        TextDetector-->>Streamlit: Redacted Text
     else PDF Processing
-        Streamlit->>PDFRedactor: python -m pdfRedactor.cli
+        Streamlit->>PDFRedactor: python -m pdf_redactor.cli
         PDFRedactor->>Common: buildPresidioAnalyzer()
         Common-->>PDFRedactor: AnalyzerEngine
         PDFRedactor->>PDFRedactor: analyzePdfToBboxes()
         PDFRedactor->>PDFRedactor: writeRedactedPdf()
         PDFRedactor-->>Streamlit: Redacted PDF
+    else Image Processing
+        Streamlit->>ImageRedactor: python -m image_redactor
+        ImageRedactor->>Common: buildPresidioAnalyzer()
+        Common-->>ImageRedactor: AnalyzerEngine
+        ImageRedactor->>ImageRedactor: OCR + Analysis
+        ImageRedactor->>ImageRedactor: applyRedactionStyle()
+        ImageRedactor-->>Streamlit: Redacted Image
+    else CSV Processing
+        Streamlit->>CSVRedactor: python -m csv_redactor
+        CSVRedactor->>Common: buildPresidioAnalyzer()
+        Common-->>CSVRedactor: AnalyzerEngine
+        CSVRedactor->>CSVRedactor: analyzeCsvFile()
+        CSVRedactor->>CSVRedactor: redactCsvFile()
+        CSVRedactor-->>Streamlit: Redacted CSV
     end
 
-    Streamlit->>Session: Store file Bytes & Name
+    Streamlit->>Session: Store File Bytes & Name
     Streamlit->>Streamlit: displayCommandLogs()
     Streamlit->>Streamlit: renderDownloadAndPreview()
-    Streamlit-->>User: Display Results & Preview
+    Streamlit-->>User: Display Results & Download
 ```
 
 ### Text Detection Module Flow
@@ -307,7 +344,7 @@ sequenceDiagram
     Tesseract-->>Redactor: OCR Results (bboxes)
 
     Redactor->>Presidio: Analyze(Extracted Text)
-    Presidio-->>Redactor: Entity Eesults
+    Presidio-->>Redactor: Entity Results
 
     Redactor->>Redactor: Map Entities To Image Coordinates
     Redactor->>ImageRedactor: Apply Redaction Style
@@ -325,6 +362,71 @@ sequenceDiagram
     Redactor-->>CLI: Output File Path
 ```
 
+### CSV Redaction Module Flow
+
+```mermaid
+sequenceDiagram
+    participant CLI as cli.py
+    participant Analyzer as analyzer.py
+    participant Common as common.py
+    participant Redactor as redactor.py
+    participant Formatter as formatter.py
+    participant Presidio as Presidio Engine
+    participant CSV as csv module
+
+    CLI->>CLI: parseArgs()
+    CLI->>CLI: Validate Input Parameters
+
+    CLI->>Analyzer: buildAnalyzer(language)
+    Analyzer->>Common: buildPresidioAnalyzer()
+    Common-->>Analyzer: AnalyzerEngine
+
+    alt Analysis Only Mode
+        CLI->>Redactor: analyzeCsvFile(path, analyzer)
+    else Redaction Mode
+        CLI->>Redactor: redactCsvFile(path, analyzer, outPath)
+    end
+
+    Redactor->>CSV: Read CSV File
+    CSV-->>Redactor: Rows Iterator
+
+    Redactor->>Redactor: Detect Header Row
+
+    loop For Each Row
+        loop For Each Cell
+            Redactor->>Presidio: analyze(cell_text)
+            Presidio-->>Redactor: RecognizerResults
+
+            alt Score >= Threshold
+                Redactor->>Redactor: Store Detection
+
+                alt Redaction Mode
+                    Redactor->>Redactor: Apply Redaction
+                    Note over Redactor: Character Masking or<br/>Label Replacement
+                end
+            end
+        end
+    end
+
+    alt JSON Output Requested
+        CLI->>Formatter: resultsToJson(detections)
+        Formatter-->>CLI: JSON String
+        CLI->>CLI: Write JSON File
+    end
+
+    alt Summary Requested
+        CLI->>Formatter: summarizeDetections(results)
+        Formatter-->>CLI: Summary Statistics
+        CLI->>CLI: Print Summary
+    end
+
+    alt Redaction Mode
+        Redactor->>CSV: Write Redacted CSV
+        CSV-->>Redactor: Success
+        Redactor-->>CLI: Output File Path
+    end
+```
+
 ### Common Module Interaction
 
 ```mermaid
@@ -336,18 +438,24 @@ graph TB
     end
 
     subgraph "Text Detection"
-        TextAnalyzer[textDetector/analyzer.py]
-        TextCLI[textDetector/cli.py]
+        TextAnalyzer[text_detector/analyzer.py]
+        TextCLI[text_detector/cli.py]
     end
 
     subgraph "PDF Redaction"
-        PDFAnalyzer[pdfRedactor/analyzer.py]
-        PDFCLI[pdfRedactor/cli.py]
+        PDFAnalyzer[pdf_redactor/analyzer.py]
+        PDFCLI[pdf_redactor/cli.py]
     end
 
     subgraph "Image Redaction"
-        ImageAnalyzer[imageRedactor/analyzer.py]
-        ImageRedactor[imageRedactor/redactor.py]
+        ImageAnalyzer[image_redactor/analyzer.py]
+        ImageRedactor[image_redactor/redactor.py]
+    end
+
+    subgraph "CSV Redaction"
+        CSVAnalyzer[csv_redactor/analyzer.py]
+        CSVCLI[csv_redactor/cli.py]
+        CSVRedactor[csv_redactor/redactor.py]
     end
 
     subgraph "Web Application"
@@ -359,124 +467,170 @@ graph TB
         Presidio[Presidio Analyzer]
     end
 
+    subgraph "Custom Extensions"
+        AURecog[entity_mapping/au_recognizers.py]
+        EntityConfig[entity_mapping/entity_config.py]
+    end
+
     TextAnalyzer --> Common
     PDFAnalyzer --> Common
     ImageAnalyzer --> Common
+    CSVAnalyzer --> Common
 
     Common --> PickModel
     Common --> BuildAnalyzer
 
     BuildAnalyzer --> Spacy
     BuildAnalyzer --> Presidio
+    BuildAnalyzer --> AURecog
 
     App --> TextCLI
     App --> PDFCLI
     App --> ImageAnalyzer
+    App --> CSVCLI
 
     TextCLI --> TextAnalyzer
     PDFCLI --> PDFAnalyzer
     ImageAnalyzer --> ImageRedactor
+    CSVCLI --> CSVAnalyzer
+    CSVCLI --> CSVRedactor
+
+    EntityConfig -.-> App
 
     style Common fill:#e1f5ff
     style BuildAnalyzer fill:#b3e5fc
     style PickModel fill:#b3e5fc
+    style AURecog fill:#ffccbc
 ```
 
-## Configuration
+### Text Chunking Strategy
 
-### Text Detection Parameters
+```mermaid
+graph TB
+    Start[Long Text Document<br/>100,000 characters] --> ChunkEval{Text Length > Chunk Size?}
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `--size` | chunk size in characters | 5000 |
-| `--overlap` | over lap between chunks | 300 |
-| `--min-score` | minimum confidence threshold | 0.0 |
-| `--lang` | language code | en |
-| `--print-text` | echo input preview | False |
-| `--anonymize` | enable anonymization mode | False |
+    ChunkEval -->|No| Direct[Direct Analysis<br/>Single Pass]
+    ChunkEval -->|Yes| ChunkSplit[Split into Chunks<br/>Size: 5000 chars<br/>Overlap: 300 chars]
 
-### Detection Confidence Levels
+    Direct --> Analyze1[Presidio Analysis]
 
-- **1.0**: exact pattern matches (emails, URLs)
-- **0.85+**: high confidence (names with context)
-- **0.5-0.85**: medium confidence
-- **<0.5**: low confidence (may include false positives)
+    ChunkSplit --> Chunk1[Chunk 1: 0-5000]
+    ChunkSplit --> Chunk2[Chunk 2: 4700-9700<br/>Overlap: 300]
+    ChunkSplit --> Chunk3[Chunk 3: 9400-14400<br/>Overlap: 300]
+    ChunkSplit --> ChunkN[Chunk N: ...<br/>Continue until end]
 
-## Examples
+    Chunk1 --> A1[Analyze Chunk 1]
+    Chunk2 --> A2[Analyze Chunk 2]
+    Chunk3 --> A3[Analyze Chunk 3]
+    ChunkN --> AN[Analyze Chunk N]
 
-### Example 1: Basic Text Redaction
+    A1 --> Merge[Merge Results<br/>Handle Overlaps]
+    A2 --> Merge
+    A3 --> Merge
+    AN --> Merge
 
-**Input:**
-```
-contact jane smith at jane.smith@company.com or call (555) 123-4567
-```
+    Analyze1 --> Output[RecognizerResults]
 
-**Output:**
-```
-contact <PERSON_1> at <EMAIL_ADDRESS_1> or call <PHONE_NUMBER_1>
-```
+    Merge --> Dedup[Deduplication<br/>Remove Overlapping Entities]
+    Dedup --> Adjust[Adjust Offsets<br/>Map To Original Text]
+    Adjust --> Output
 
-### Example 2: Relationship-Aware Masking
-
-**Input:**
-```
-john's email is john@example.com
-sarah's phone is 555-1234
+    style ChunkSplit fill:#fff9c4
+    style Merge fill:#c8e6c9
+    style Output fill:#e1f5ff
 ```
 
-**Output:**
-```
-john's email is <John's EMAIL_ADDRESS>
-sarah's phone is <Sarah's PHONE_NUMBER>
+### Deployment & Usage Workflow
+
+```mermaid
+graph LR
+    subgraph "Setup Phase"
+        Install[Install Dependencies<br/>pip install -r requirements.txt] --> Model[Download spaCy Model<br/>python -m spacy download]
+        Model --> OCRSetup[Install Tesseract<br/>brew install tesseract]
+    end
+
+    subgraph "Usage Options"
+        OCRSetup --> Choice{Choose Interface}
+
+        Choice -->|Interactive| Web[Launch Web App<br/>streamlit run src/app.py]
+        Choice -->|Automation| CLI[Use CLI Tools<br/>python -m module]
+    end
+
+    subgraph "Web Application Workflow"
+        Web --> Upload[Upload/Paste Content]
+        Upload --> Configure[Set Parameters<br/>Chunk Size, Threshold, etc.]
+        Configure --> Process[Process & Redact]
+        Process --> Preview[Preview Results]
+        Preview --> Download[Download Redacted File]
+    end
+
+    subgraph "CLI Workflow"
+        CLI --> SelectMod{Select Module}
+
+        SelectMod -->|Text| TextCLI[text_detector]
+        SelectMod -->|PDF| PDFCLI[pdf_redactor]
+        SelectMod -->|Image| ImgCLI[image_redactor]
+        SelectMod -->|CSV| CSVCLI[csv_redactor]
+
+        TextCLI --> Batch[Batch Processing<br/>Scripts & Automation]
+        PDFCLI --> Batch
+        ImgCLI --> Batch
+        CSVCLI --> Batch
+    end
+
+    Download --> Done[Secure Document<br/>Ready for Sharing]
+    Batch --> Done
+
+    style Web fill:#c8e6c9
+    style Done fill:#fff9c4
+    style Batch fill:#e1f5ff
 ```
 
-### Example 3: PDF with Multiple Pages
+### Data Privacy & Security Flow
 
-```bash
-python -m pdfRedactor.cli --in contract.pdf --out contract_redacted.pdf
+```mermaid
+graph TB
+    Input[Input Document<br/>Contains PII] --> LocalCheck{Processing Location}
+
+    LocalCheck -->|✓ Local Machine| LocalProc[Local Processing<br/>No External Servers]
+    LocalCheck -->|✗ External API| Reject[❌ Not Supported<br/>Privacy First Design]
+
+    LocalProc --> TempFiles[Temporary Files<br/>Created During Processing]
+
+    TempFiles --> Process[PII Detection<br/>& Redaction]
+
+    Process --> Original[Original File<br/>Remains Unchanged]
+    Process --> Redacted[Redacted Copy<br/>Created]
+
+    Redacted --> Permanent{Redaction Type}
+
+    Permanent -->|Text/CSV| CharReplace[Character Replacement<br/>Original Text Lost]
+    Permanent -->|PDF| BlackBox[Black Overlay<br/>Text Removed from Layer]
+    Permanent -->|Image| PixelMod[Pixel Modification<br/>Original Pixels Lost]
+
+    CharReplace --> Cleanup[Temporary File Cleanup<br/>Auto-Deletion]
+    BlackBox --> Cleanup
+    PixelMod --> Cleanup
+
+    Cleanup --> SecureOutput[✓ Secure Redacted File<br/>Safe For Distribution]
+    Original --> Archive[Original Archived<br/>Securely]
+
+    style LocalProc fill:#c8e6c9
+    style Reject fill:#ffccbc
+    style SecureOutput fill:#fff9c4
+    style Archive fill:#e1f5ff
 ```
-
-creates a new PDF with all detected PII regions permanently redacted with black boxes.
 
 ## Technology Stack
 
 - **Microsoft Presidio**: PII detection and anonymization framework
 - **spaCy**: advanced NLP and named entity recognition
-- **Stream Lit**: modern web application framework
+- **Stream-Lit**: modern web application framework
 - **pdfminer.six**: PDF text extraction
 - **pikepdf**: PDF manipulation and editing
 - **pytesseract**: OCR for scanned documents
-- **Pillow**: image processing
+- **pillow**: image processing
 
 ## Requirements
 
-see [requirements.txt](requirements.txt) for complete list:
-
-```txt
-streamlit>=1.20.0
-streamlit-pdf-viewer>=0.0.15
-presidio-analyzer>=2.2.0
-presidio-anonymizer>=2.2.0
-presidio-image-redactor>=0.0.50
-spacy>=3.5.0
-pdfminer.six>=20221105
-pikepdf>=8.0.0
-Pillow>=10.0.0
-pytesseract>=0.3.10
-```
-
-## Privacy & Security
-
-- all processing happens locally: no data is sent to external servers
-- redacted files are generated with permanent removal (not just visual masking)
-- original files remain unchanged
-- temporary files are automatically cleaned up
-
-## Limitations
-
-- spaCy model accuracy varies by entity type and context
-- scanned PDF processing requires Tesseract OCR installation
-- very large files may require increased memory
-- some context-dependent PII may be missed (requires human review)
-
-**Note**: this tool aids in PII detection but should not be solely relied upon for compliance. always review redacted documents manually for sensitive use cases.
+see [requirements.txt](requirements.txt) for complete list.
